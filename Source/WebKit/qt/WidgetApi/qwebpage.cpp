@@ -281,11 +281,6 @@ QWebPageAdapter *QWebPagePrivate::createWindow(bool dialog)
     return newPage->d;
 }
 
-void QWebPagePrivate::javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack)
-{
-    q->javaScriptError(message, lineNumber, sourceID, stack);
-}
-
 void QWebPagePrivate::javaScriptConsoleMessage(const QString &message, int lineNumber, const QString &sourceID)
 {
     q->javaScriptConsoleMessage(message, lineNumber, sourceID);
@@ -415,7 +410,7 @@ bool QWebPagePrivate::errorPageExtension(QWebPageAdapter::ErrorPageOption *opt, 
         option.domain = QWebPage::QtNetwork;
     else if (opt->domain == QLatin1String("HTTP"))
         option.domain = QWebPage::Http;
-    else if (opt->domain == QLatin1String("WebKit"))
+    else if (opt->domain == QLatin1String("WebKit") || opt->domain == QLatin1String("WebKitErrorDomain"))
         option.domain = QWebPage::WebKit;
     else
         return false;
@@ -1642,14 +1637,6 @@ bool QWebPage::javaScriptPrompt(QWebFrame *frame, const QString& msg, const QStr
         *result = dlg.textValue();
 #endif
     return ok;
-}
-
-void QWebPage::javaScriptError(const QString &message, int lineNumber, const QString &sourceID, const QString &stack)
-{
-    Q_UNUSED(message);
-    Q_UNUSED(lineNumber);
-    Q_UNUSED(sourceID);
-    Q_UNUSED(stack);
 }
 
 /*!

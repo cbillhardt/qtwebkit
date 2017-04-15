@@ -642,6 +642,7 @@ private Q_SLOTS:
     void introspectQtMethods_data();
     void introspectQtMethods();
     void scriptablePlugin();
+    void exceptionInSlot();
 
 private:
     QString evalJS(const QString& s)
@@ -1572,26 +1573,26 @@ void tst_QObjectBridge::connectAndDisconnect()
         QString type;
         QString ret = evalJS("(function() { }).connect()", type);
         QCOMPARE(type, sError);
-        QCOMPARE(ret, QLatin1String("TypeError: 'undefined' is not a function (evaluating '(function() { }).connect()')"));
+        QCOMPARE(ret, QLatin1String("TypeError: undefined is not a function (evaluating '(function() { }).connect()')"));
     }
     {
         QString type;
         QString ret = evalJS("var o = { }; o.connect = Function.prototype.connect;  o.connect()", type);
         QCOMPARE(type, sError);
-        QCOMPARE(ret, QLatin1String("TypeError: 'undefined' is not a function (evaluating 'o.connect()')"));
+        QCOMPARE(ret, QLatin1String("TypeError: undefined is not a function (evaluating 'o.connect()')"));
     }
 
     {
         QString type;
         QString ret = evalJS("(function() { }).connect(123)", type);
         QCOMPARE(type, sError);
-        QCOMPARE(ret, QLatin1String("TypeError: 'undefined' is not a function (evaluating '(function() { }).connect(123)')"));
+        QCOMPARE(ret, QLatin1String("TypeError: undefined is not a function (evaluating '(function() { }).connect(123)')"));
     }
     {
         QString type;
         QString ret = evalJS("var o = { }; o.connect = Function.prototype.connect;  o.connect(123)", type);
         QCOMPARE(type, sError);
-        QCOMPARE(ret, QLatin1String("TypeError: 'undefined' is not a function (evaluating 'o.connect(123)')"));
+        QCOMPARE(ret, QLatin1String("TypeError: undefined is not a function (evaluating 'o.connect(123)')"));
     }
 
     {
@@ -2232,6 +2233,33 @@ void tst_QObjectBridge::scriptablePlugin()
 
     QVariant result = page->mainFrame()->evaluateJavaScript("document.querySelector(\"object\").slotWithReturnValue()");
     QCOMPARE(result.toString(), QLatin1String("42"));
+}
+
+class WebPageWithConsoleCapture : public QWebPage
+{
+public:
+    void javaScriptConsoleMessage(const QString &message, int, const QString &)
+    {
+        consoleMessages << message;
+    }
+
+    QStringList consoleMessages;
+};
+
+void tst_QObjectBridge::exceptionInSlot()
+{
+    WebPageWithConsoleCapture page;
+    QWebFrame* frame = page.mainFrame();
+    frame->addToJavaScriptWindowObject("myObject", m_myObject);
+    frame->evaluateJavaScript(
+        "myHandler = function() { window.gotSignal = true; throw 'exception in slot'; };"
+        "myObject.mySignal.connect(myHandler);"
+        "gotSignal = false;"
+        "myObject.mySignal();"
+    );
+    QString ret = frame->evaluateJavaScript("gotSignal").toString();
+    QCOMPARE(ret, sTrue);
+    QCOMPARE(page.consoleMessages, QStringList() << "exception in slot");
 }
 
 QTEST_MAIN(tst_QObjectBridge)

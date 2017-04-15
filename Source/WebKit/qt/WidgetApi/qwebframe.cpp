@@ -21,6 +21,7 @@
 #include "config.h"
 #include "qwebframe.h"
 
+#include "QtPrintContext.h"
 #include "qwebelement.h"
 #include "qwebframe_p.h"
 #include "qwebpage.h"
@@ -35,13 +36,10 @@
 #include <qfileinfo.h>
 #include <qpainter.h>
 #if HAVE(QTPRINTSUPPORT)
-#include "QtPrintContext.h"
 #include <qprinter.h>
 #endif
 #include <qnetworkrequest.h>
 #include <qregion.h>
-
-#include "qwebframe_printingaddons_p.h"
 
 using namespace WebCore;
 
@@ -827,16 +825,8 @@ bool QWebFrame::event(QEvent *e)
 */
 void QWebFrame::print(QPrinter *printer) const
 {
-    print(printer, 0);
-}
-
-void QWebFrame::print(QPrinter *printer, PrintCallback *callback) const
-{
 #if HAVE(QTPRINTSUPPORT)
     QPainter painter;
-
-    HeaderFooter headerFooter(this, printer, callback);
-
     if (!painter.begin(printer))
         return;
 
@@ -893,13 +883,6 @@ void QWebFrame::print(QPrinter *printer, PrintCallback *callback) const
                     || printer->printerState() == QPrinter::Error) {
                     return;
                 }
-                if (headerFooter.isValid()) {
-                    // print header/footer
-                    int logicalPage, logicalPages;
-                    d->frame->getPagination(page, printContext.pageCount(), logicalPage, logicalPages);
-                    headerFooter.paintHeader(printContext.graphicsContext(), pageRect, logicalPage, logicalPages);
-                    headerFooter.paintFooter(printContext.graphicsContext(), pageRect, logicalPage, logicalPages);
-                }
                 printContext.spoolPage(page - 1, pageRect.width());
                 if (j < pageCopies - 1)
                     printer->newPage();
@@ -927,11 +910,25 @@ void QWebFrame::print(QPrinter *printer, PrintCallback *callback) const
     Evaluates the JavaScript defined by \a scriptSource using this frame as context
     and returns the result of the last executed statement.
 
-    \sa addToJavaScriptWindowObject(), javaScriptWindowObjectCleared()
+    \note This method may be very inefficient if \a scriptSource returns a DOM element
+    as a result. For example, evaluation of the next innocuously looking code may take
+    a lot of CPU and memory to execute:
+
+    \code
+        var img = document.createElement('img');
+        document.getElementById(\"foo\").appendChild(img);
+    \endcode
+
+    This code returns appended DOM element, which is converted to QVariantMap
+    containing all its properties. To avoid this issue you can add "true" after
+    the last statement.
+
+    \sa addToJavaScriptWindowObject(), javaScriptWindowObjectCleared(),
+    QWebElement::evaluateJavaScript()
 */
-QVariant QWebFrame::evaluateJavaScript(const QString& scriptSource, const QUrl& location)
+QVariant QWebFrame::evaluateJavaScript(const QString& scriptSource)
 {
-    return d->evaluateJavaScript(scriptSource, location);
+    return d->evaluateJavaScript(scriptSource);
 }
 
 /*!

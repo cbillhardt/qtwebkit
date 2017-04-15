@@ -39,7 +39,6 @@ public:
 
     int pageCount() const;
     void spoolPage(int pageNumber, float width);
-    WebCore::GraphicsContext& graphicsContext() const;
 
 private:
     WebCore::GraphicsContext* m_graphicsContext;
