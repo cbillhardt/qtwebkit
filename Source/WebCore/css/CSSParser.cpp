@@ -703,7 +703,7 @@ static inline bool isValidKeywordPropertyAndValue(CSSPropertyID propertyId, int 
         // inline | block | list-item | run-in | inline-block | table |
         // inline-table | table-row-group | table-header-group | table-footer-group | table-row |
         // table-column-group | table-column | table-cell | table-caption | -webkit-box | -webkit-inline-box | none | inherit
-        // flex | -webkit-flex | inline-flex | -webkit-inline-flex | -webkit-grid | -webkit-inline-grid
+        // -webkit-flex | -webkit-inline-flex | -webkit-grid | -webkit-inline-grid
         if ((valueID >= CSSValueInline && valueID <= CSSValueWebkitInlineFlex) || valueID == CSSValueNone)
             return true;
         if (parserContext.isCSSGridLayoutEnabled && (valueID == CSSValueWebkitGrid || valueID == CSSValueWebkitInlineGrid))
@@ -872,27 +872,27 @@ static inline bool isValidKeywordPropertyAndValue(CSSPropertyID propertyId, int 
         if (valueID == CSSValueSrgb || valueID == CSSValueDefault)
             return true;
         break;
-    case CSSPropertyAlignContent:
+    case CSSPropertyWebkitAlignContent:
          if (valueID == CSSValueFlexStart || valueID == CSSValueFlexEnd || valueID == CSSValueCenter || valueID == CSSValueSpaceBetween || valueID == CSSValueSpaceAround || valueID == CSSValueStretch)
              return true;
          break;
-    case CSSPropertyAlignItems:
+    case CSSPropertyWebkitAlignItems:
         if (valueID == CSSValueFlexStart || valueID == CSSValueFlexEnd || valueID == CSSValueCenter || valueID == CSSValueBaseline || valueID == CSSValueStretch)
             return true;
         break;
-    case CSSPropertyAlignSelf:
+    case CSSPropertyWebkitAlignSelf:
         if (valueID == CSSValueAuto || valueID == CSSValueFlexStart || valueID == CSSValueFlexEnd || valueID == CSSValueCenter || valueID == CSSValueBaseline || valueID == CSSValueStretch)
             return true;
         break;
-    case CSSPropertyFlexDirection:
+    case CSSPropertyWebkitFlexDirection:
         if (valueID == CSSValueRow || valueID == CSSValueRowReverse || valueID == CSSValueColumn || valueID == CSSValueColumnReverse)
             return true;
         break;
-    case CSSPropertyFlexWrap:
+    case CSSPropertyWebkitFlexWrap:
         if (valueID == CSSValueNowrap || valueID == CSSValueWrap || valueID == CSSValueWrapReverse)
              return true;
         break;
-    case CSSPropertyJustifyContent:
+    case CSSPropertyWebkitJustifyContent:
         if (valueID == CSSValueFlexStart || valueID == CSSValueFlexEnd || valueID == CSSValueCenter || valueID == CSSValueSpaceBetween || valueID == CSSValueSpaceAround)
             return true;
         break;
@@ -1119,12 +1119,12 @@ static inline bool isKeywordPropertyID(CSSPropertyID propertyId)
     case CSSPropertyWebkitColumnBreakBefore:
     case CSSPropertyWebkitColumnBreakInside:
     case CSSPropertyWebkitColumnRuleStyle:
-    case CSSPropertyAlignContent:
-    case CSSPropertyAlignItems:
-    case CSSPropertyAlignSelf:
-    case CSSPropertyFlexDirection:
-    case CSSPropertyFlexWrap:
-    case CSSPropertyJustifyContent:
+    case CSSPropertyWebkitAlignContent:
+    case CSSPropertyWebkitAlignItems:
+    case CSSPropertyWebkitAlignSelf:
+    case CSSPropertyWebkitFlexDirection:
+    case CSSPropertyWebkitFlexWrap:
+    case CSSPropertyWebkitJustifyContent:
     case CSSPropertyWebkitFontKerning:
     case CSSPropertyWebkitFontSmoothing:
     case CSSPropertyWebkitHyphens:
@@ -1609,13 +1609,6 @@ bool CSSParser::validCalculationUnit(CSSParserValue* value, Units unitflags, Rel
 
     bool b = false;
     switch (m_parsedCalculation->category()) {
-    case CalcNumber:
-        b = (unitflags & FNumber);
-        if (!b && (unitflags & FInteger) && m_parsedCalculation->isInt())
-            b = true;
-        if (b && mustBeNonNegative && m_parsedCalculation->isNegative())
-            b = false;
-        break;
     case CalcLength:
         b = (unitflags & FLength);
         break;
@@ -1624,20 +1617,18 @@ bool CSSParser::validCalculationUnit(CSSParserValue* value, Units unitflags, Rel
         if (b && mustBeNonNegative && m_parsedCalculation->isNegative())
             b = false;
         break;
+    case CalcNumber:
+        b = (unitflags & FNumber);
+        if (!b && (unitflags & FInteger) && m_parsedCalculation->isInt())
+            b = true;
+        if (b && mustBeNonNegative && m_parsedCalculation->isNegative())
+            b = false;
+        break;
     case CalcPercentLength:
         b = (unitflags & FPercent) && (unitflags & FLength);
         break;
     case CalcPercentNumber:
         b = (unitflags & FPercent) && (unitflags & FNumber);
-        break;
-    case CalcAngle:
-        b = (unitflags & FAngle);
-        break;
-    case CalcTime:
-        b = (unitflags & FTime);
-        break;
-    case CalcFrequency:
-        b = (unitflags & FFrequency);
         break;
 #if ENABLE(CSS_VARIABLES)
     case CalcVariable:
@@ -2509,28 +2500,28 @@ bool CSSParser::parseValue(CSSPropertyID propId, bool important)
             validPrimitive = true;
         break;
 #endif
-    case CSSPropertyFlex: {
+    case CSSPropertyWebkitFlex: {
         ShorthandScope scope(this, propId);
         if (id == CSSValueNone) {
-            addProperty(CSSPropertyFlexGrow, cssValuePool().createValue(0, CSSPrimitiveValue::CSS_NUMBER), important);
-            addProperty(CSSPropertyFlexShrink, cssValuePool().createValue(0, CSSPrimitiveValue::CSS_NUMBER), important);
-            addProperty(CSSPropertyFlexBasis, cssValuePool().createIdentifierValue(CSSValueAuto), important);
+            addProperty(CSSPropertyWebkitFlexGrow, cssValuePool().createValue(0, CSSPrimitiveValue::CSS_NUMBER), important);
+            addProperty(CSSPropertyWebkitFlexShrink, cssValuePool().createValue(0, CSSPrimitiveValue::CSS_NUMBER), important);
+            addProperty(CSSPropertyWebkitFlexBasis, cssValuePool().createIdentifierValue(CSSValueAuto), important);
             return true;
         }
         return parseFlex(m_valueList.get(), important);
     }
-    case CSSPropertyFlexBasis:
+    case CSSPropertyWebkitFlexBasis:
         // FIXME: Support intrinsic dimensions too.
         if (id == CSSValueAuto)
             validPrimitive = true;
         else
             validPrimitive = (!id && validUnit(value, FLength | FPercent | FNonNeg));
         break;
-    case CSSPropertyFlexGrow:
-    case CSSPropertyFlexShrink:
+    case CSSPropertyWebkitFlexGrow:
+    case CSSPropertyWebkitFlexShrink:
         validPrimitive = validUnit(value, FNumber | FNonNeg);
         break;
-    case CSSPropertyOrder:
+    case CSSPropertyWebkitOrder:
         if (validUnit(value, FInteger, CSSStrictMode)) {
             // We restrict the smallest value to int min + 2 because we use int min and int min + 1 as special values in a hash set.
             parsedValue = cssValuePool().createValue(max(static_cast<double>(std::numeric_limits<int>::min() + 2), value->fValue),
@@ -2883,8 +2874,8 @@ bool CSSParser::parseValue(CSSPropertyID propId, bool important)
     case CSSPropertyPadding:
         // <padding-width>{1,4} | inherit
         return parse4Values(propId, paddingShorthand().properties(), important);
-    case CSSPropertyFlexFlow:
-        return parseShorthand(propId, flexFlowShorthand(), important);
+    case CSSPropertyWebkitFlexFlow:
+        return parseShorthand(propId, webkitFlexFlowShorthand(), important);
     case CSSPropertyFont:
         // [ [ 'font-style' || 'font-variant' || 'font-weight' ]? 'font-size' [ / 'line-height' ]?
         // 'font-family' ] | caption | icon | menu | message-box | small-caption | status-bar | inherit
@@ -3056,12 +3047,12 @@ bool CSSParser::parseValue(CSSPropertyID propId, bool important)
     case CSSPropertyWebkitColumnBreakBefore:
     case CSSPropertyWebkitColumnBreakInside:
     case CSSPropertyWebkitColumnRuleStyle:
-    case CSSPropertyAlignContent:
-    case CSSPropertyAlignItems:
-    case CSSPropertyAlignSelf:
-    case CSSPropertyFlexDirection:
-    case CSSPropertyFlexWrap:
-    case CSSPropertyJustifyContent:
+    case CSSPropertyWebkitAlignContent:
+    case CSSPropertyWebkitAlignItems:
+    case CSSPropertyWebkitAlignSelf:
+    case CSSPropertyWebkitFlexDirection:
+    case CSSPropertyWebkitFlexWrap:
+    case CSSPropertyWebkitJustifyContent:
     case CSSPropertyWebkitFontKerning:
     case CSSPropertyWebkitFontSmoothing:
     case CSSPropertyWebkitHyphens:
@@ -6607,9 +6598,9 @@ bool CSSParser::parseFlex(CSSParserValueList* args, bool important)
     if (!flexBasis)
         flexBasis = cssValuePool().createValue(0, CSSPrimitiveValue::CSS_PX);
 
-    addProperty(CSSPropertyFlexGrow, cssValuePool().createValue(clampToFloat(flexGrow), CSSPrimitiveValue::CSS_NUMBER), important);
-    addProperty(CSSPropertyFlexShrink, cssValuePool().createValue(clampToFloat(flexShrink), CSSPrimitiveValue::CSS_NUMBER), important);
-    addProperty(CSSPropertyFlexBasis, flexBasis, important);
+    addProperty(CSSPropertyWebkitFlexGrow, cssValuePool().createValue(clampToFloat(flexGrow), CSSPrimitiveValue::CSS_NUMBER), important);
+    addProperty(CSSPropertyWebkitFlexShrink, cssValuePool().createValue(clampToFloat(flexShrink), CSSPrimitiveValue::CSS_NUMBER), important);
+    addProperty(CSSPropertyWebkitFlexBasis, flexBasis, important);
     return true;
 }
 

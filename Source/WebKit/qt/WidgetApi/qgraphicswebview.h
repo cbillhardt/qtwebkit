@@ -54,7 +54,7 @@ class QWEBKITWIDGETS_EXPORT QGraphicsWebView : public QGraphicsWidget {
     Q_FLAGS(QPainter::RenderHints)
 
 public:
-    explicit QGraphicsWebView(QGraphicsItem* parent = Q_NULLPTR);
+    explicit QGraphicsWebView(QGraphicsItem* parent = 0);
     ~QGraphicsWebView();
 
     QWebPage* page() const;
@@ -84,7 +84,7 @@ public:
     QAction* pageAction(QWebPage::WebAction action) const;
     void triggerPageAction(QWebPage::WebAction action, bool checked = false);
 
-    bool findText(const QString& subString, QWebPage::FindFlags options = QWebPage::FindFlags());
+    bool findText(const QString& subString, QWebPage::FindFlags options = 0);
 
     bool resizesToContents() const;
     void setResizesToContents(bool enabled);
@@ -92,15 +92,15 @@ public:
     bool isTiledBackingStoreFrozen() const;
     void setTiledBackingStoreFrozen(bool frozen);
 
-    void setGeometry(const QRectF& rect) Q_DECL_OVERRIDE;
-    void updateGeometry() Q_DECL_OVERRIDE;
-    void paint(QPainter*, const QStyleOptionGraphicsItem* options, QWidget* widget = Q_NULLPTR) Q_DECL_OVERRIDE;
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value) Q_DECL_OVERRIDE;
-    bool event(QEvent*) Q_DECL_OVERRIDE;
+    virtual void setGeometry(const QRectF& rect);
+    virtual void updateGeometry();
+    virtual void paint(QPainter*, const QStyleOptionGraphicsItem* options, QWidget* widget = 0);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
+    virtual bool event(QEvent*);
 
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint) const Q_DECL_OVERRIDE;
+    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint) const;
 
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const Q_DECL_OVERRIDE;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     QPainter::RenderHints renderHints() const;
     void setRenderHints(QPainter::RenderHints);
@@ -124,30 +124,30 @@ Q_SIGNALS:
     void linkClicked(const QUrl&);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) Q_DECL_OVERRIDE;
-    void hoverMoveEvent(QGraphicsSceneHoverEvent*) Q_DECL_OVERRIDE;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) Q_DECL_OVERRIDE;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*);
+    virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QGraphicsSceneWheelEvent*) Q_DECL_OVERRIDE;
+    virtual void wheelEvent(QGraphicsSceneWheelEvent*);
 #endif
-    void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-    void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+    virtual void keyPressEvent(QKeyEvent*);
+    virtual void keyReleaseEvent(QKeyEvent*);
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent*) Q_DECL_OVERRIDE;
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 #endif
-    void dragEnterEvent(QGraphicsSceneDragDropEvent*) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent*) Q_DECL_OVERRIDE;
-    void dragMoveEvent(QGraphicsSceneDragDropEvent*) Q_DECL_OVERRIDE;
-    void dropEvent(QGraphicsSceneDragDropEvent*) Q_DECL_OVERRIDE;
-    void focusInEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-    void focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-    void inputMethodEvent(QInputMethodEvent*) Q_DECL_OVERRIDE;
-    bool focusNextPrevChild(bool next) Q_DECL_OVERRIDE;
+    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent*);
+    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent*);
+    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent*);
+    virtual void dropEvent(QGraphicsSceneDragDropEvent*);
+    virtual void focusInEvent(QFocusEvent*);
+    virtual void focusOutEvent(QFocusEvent*);
+    virtual void inputMethodEvent(QInputMethodEvent*);
+    virtual bool focusNextPrevChild(bool next);
 
-    bool sceneEvent(QEvent*) Q_DECL_OVERRIDE;
+    virtual bool sceneEvent(QEvent*);
 
 private:
     Q_PRIVATE_SLOT(d, void _q_doLoadFinished(bool success))

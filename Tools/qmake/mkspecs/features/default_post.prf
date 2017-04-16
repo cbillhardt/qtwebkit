@@ -201,7 +201,6 @@ needToLink() {
         linkAgainstLibrary($$library, $$eval(WEBKIT.$${library_identifier}.root_source_dir))
         LIBS += $$eval(WEBKIT.$${library_identifier}.dependent_libs)
     }
-    posix:!darwin: LIBS += -lpthread
 }
 
 creating_module {
@@ -263,8 +262,7 @@ QMAKE_EXTRA_TARGETS += incremental
 
 contains(TEMPLATE, lib) {
     # Triggers the right export macros for WebKit internals
-    # (don't set for Qt modules; qt_module.prf does it)
-    !creating_module: DEFINES += BUILDING_$${TARGET}
+    DEFINES += BUILDING_$${TARGET}
 
     # Triggers the right export macro for the QtWebKit API (see qwebkitglobal.h)
     !contains(QT, webkit)|equals(MODULE, webkitwidgets): DEFINES += BUILDING_WEBKIT
@@ -285,8 +283,8 @@ contains(TEMPLATE, lib) {
     DEFINES += QT_ASCII_CAST_WARNINGS
 
     !plugin {
-        qtConfig(reduce_exports):CONFIG += hide_symbols
-        unix:qtConfig(reduce_relocations):CONFIG += bsymbolic_functions
+        contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+        unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
     }
 }
 

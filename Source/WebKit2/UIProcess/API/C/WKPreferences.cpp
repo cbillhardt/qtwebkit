@@ -1144,13 +1144,3 @@ double WKPreferencesGetIncrementalRenderingSuppressionTimeout(WKPreferencesRef p
 {
     return toAPI(toImpl(preferencesRef)->incrementalRenderingSuppressionTimeout());
 }
-
-void WKPreferencesSetSpatialNavigationEnabled(WKPreferencesRef preferencesRef, bool enabled)
-{
-    toImpl(preferencesRef)->setSpatialNavigationEnabled(enabled);
-}
-
-bool WKPreferencesGetSpatialNavigationEnabled(WKPreferencesRef preferencesRef)
-{
-    return toImpl(preferencesRef)->spatialNavigationEnabled();
-}

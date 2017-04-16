@@ -36,7 +36,7 @@ public:
     static QString identifier() { return QStringLiteral("webicon"); }
 
     QUrl iconURLForPageURLInContext(const QString& pageURL, WebKit::QtWebContext* context);
-    QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize) Q_DECL_OVERRIDE;
+    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
 };
 
 #endif

@@ -22,7 +22,6 @@
 #ifndef RenderThemeQt_h
 #define RenderThemeQt_h
 
-#include "QStyleFacade.h"
 #include "RenderTheme.h"
 
 #include <QBrush>
@@ -169,8 +168,6 @@ protected:
     virtual String fileListNameForWidth(const FileList*, const Font&, int width, bool multipleFilesAllowed) const OVERRIDE;
 
     virtual QRect inflateButtonRect(const QRect& originalRect) const;
-    virtual void computeControlRect(QStyleFacade::ButtonType, QRect& originalRect) const;
-    virtual void computeControlRect(QStyleFacade::ButtonType, IntRect& originalRect) const;
 
     virtual void setPopupPadding(RenderStyle*) const = 0;
 

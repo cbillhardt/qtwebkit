@@ -265,7 +265,7 @@ public:
     };
 
 
-    explicit QWebPage(QObject *parent = Q_NULLPTR);
+    explicit QWebPage(QObject *parent = 0);
     ~QWebPage();
 
     QWebFrame *mainFrame() const;
@@ -312,12 +312,12 @@ public:
     void setPreferredContentsSize(const QSize &size) const;
     void setActualVisibleContentRect(const QRect& rect) const;
 
-    bool event(QEvent*) Q_DECL_OVERRIDE;
+    virtual bool event(QEvent*);
     bool focusNextPrevChild(bool next);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery property) const;
 
-    bool findText(const QString &subString, FindFlags options = FindFlags());
+    bool findText(const QString &subString, FindFlags options = 0);
 
     void setForwardUnsupportedContent(bool forward);
     bool forwardUnsupportedContent() const;
@@ -383,7 +383,7 @@ public:
     };
 
 
-    virtual bool extension(Extension extension, const ExtensionOption *option = Q_NULLPTR, ExtensionReturn *output = Q_NULLPTR);
+    virtual bool extension(Extension extension, const ExtensionOption *option = 0, ExtensionReturn *output = 0);
     virtual bool supportsExtension(Extension extension) const;
 
     QWebPageAdapter* handle() const;
@@ -436,6 +436,7 @@ protected:
     virtual bool javaScriptConfirm(QWebFrame *originatingFrame, const QString& msg);
     virtual bool javaScriptPrompt(QWebFrame *originatingFrame, const QString& msg, const QString& defaultValue, QString* result);
     virtual void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
+    virtual void javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack);
 
     virtual QString userAgentForUrl(const QUrl& url) const;
 

@@ -13,7 +13,7 @@ QT -= gui
 
 win32-*: CONFIG += console
 win32-msvc*: CONFIG += exceptions_off stl_off
-contains(MSVC_VER, "(9|10|11|12)\.0)"): INCLUDEPATH += $$ROOT_WEBKIT_DIR/Source/JavaScriptCore/os-win32
+win32-msvc*|win32-icc: INCLUDEPATH += $$ROOT_WEBKIT_DIR/Source/JavaScriptCore/os-win32
 
 WEBKIT += javascriptcore wtf
 
@@ -28,6 +28,6 @@ wince* {
 }
 
 # Prevent warnings about difference in visibility on Mac OS X
-qtConfig(reduce_exports):CONFIG += hide_symbols
-unix:qtConfig(reduce_relocations):CONFIG += bsymbolic_functions
+contains(QT_CONFIG, reduce_exports):CONFIG += hide_symbols
+unix:contains(QT_CONFIG, reduce_relocations):CONFIG += bsymbolic_functions
 

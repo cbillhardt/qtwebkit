@@ -1289,12 +1289,10 @@ template<> inline CSSPrimitiveValue::CSSPrimitiveValue(EDisplay e)
         m_value.valueID = CSSValueWebkitInlineBox;
         break;
     case FLEX:
-    case WEBKIT_FLEX:
-        m_value.valueID = CSSValueFlex;
+        m_value.valueID = CSSValueWebkitFlex;
         break;
     case INLINE_FLEX:
-    case WEBKIT_INLINE_FLEX:
-        m_value.valueID = CSSValueInlineFlex;
+        m_value.valueID = CSSValueWebkitInlineFlex;
         break;
     case GRID:
         m_value.valueID = CSSValueWebkitGrid;
@@ -1315,10 +1313,6 @@ template<> inline CSSPrimitiveValue::operator EDisplay() const
 
     EDisplay display = static_cast<EDisplay>(m_value.valueID - CSSValueInline);
     ASSERT(display >= INLINE && display <= NONE);
-    if (display == WEBKIT_FLEX)
-        return FLEX;
-    if (display == WEBKIT_INLINE_FLEX)
-        return INLINE_FLEX;
     return display;
 }
 

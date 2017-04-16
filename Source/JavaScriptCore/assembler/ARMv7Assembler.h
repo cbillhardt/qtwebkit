@@ -1960,10 +1960,8 @@ public:
     int jumpSizeDelta(JumpType jumpType, JumpLinkType jumpLinkType) { return JUMP_ENUM_SIZE(jumpType) - JUMP_ENUM_SIZE(jumpLinkType); }
     
     // Assembler admin methods:
-#if !OS(QNX)
-    ALWAYS_INLINE
-#endif
-    static bool linkRecordSourceComparator(const LinkRecord& a, const LinkRecord& b)
+
+    static ALWAYS_INLINE bool linkRecordSourceComparator(const LinkRecord& a, const LinkRecord& b)
     {
         return a.from() < b.from();
     }

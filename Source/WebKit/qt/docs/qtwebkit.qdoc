@@ -175,7 +175,7 @@
     \endtable
 
     \table
-    \header \li \macos
+    \header \li Mac OS X
     \row \li
     \list
     \li \c{Library/Internet Plug-Ins} in the user's home directory

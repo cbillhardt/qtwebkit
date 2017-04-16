@@ -80,7 +80,7 @@ void LocationEdit::resizeEvent(QResizeEvent*)
 
 void LocationEdit::updateInternalGeometry()
 {
-    QStyleOptionFrame styleOption;
+    QStyleOptionFrameV3 styleOption;
     initStyleOption(&styleOption);
 
     QRect textRect = style()->subElementRect(QStyle::SE_LineEditContents, &styleOption, this);

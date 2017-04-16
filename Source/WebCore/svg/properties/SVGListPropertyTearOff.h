@@ -121,12 +121,6 @@ protected:
     {
     }
 
-    virtual ~SVGListPropertyTearOff()
-    {
-        if (m_animatedProperty)
-            m_animatedProperty->propertyWillBeDeleted(*this);
-    }
-
     virtual bool isReadOnly() const
     {
         if (m_role == AnimValRole)

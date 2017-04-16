@@ -927,8 +927,7 @@ private:
 
 class PropertyWrapperFlex : public AnimationPropertyWrapperBase {
 public:
-    PropertyWrapperFlex()
-        : AnimationPropertyWrapperBase(CSSPropertyFlex)
+    PropertyWrapperFlex() : AnimationPropertyWrapperBase(CSSPropertyWebkitFlex)
     {
     }
 

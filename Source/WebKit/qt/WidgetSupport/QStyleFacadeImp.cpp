@@ -163,8 +163,6 @@ QRect QStyleFacadeImp::buttonSubElementRect(QStyleFacade::ButtonSubElement butto
 
     QStyle::SubElement subElement = QStyle::SE_CustomBase;
     switch (buttonElement) {
-    case CheckBoxIndicator: subElement = QStyle::SE_CheckBoxIndicator; break;
-    case RadioButtonIndicator: subElement = QStyle::SE_RadioButtonIndicator; break;
     case PushButtonLayoutItem: subElement = QStyle::SE_PushButtonLayoutItem; break;
     case PushButtonContents: subElement = QStyle::SE_PushButtonContents; break;
     default: ASSERT_NOT_REACHED();
@@ -211,7 +209,7 @@ int QStyleFacadeImp::sliderThickness(Qt::Orientation orientation) const
 
 int QStyleFacadeImp::progressBarChunkWidth(const QSize& size) const
 {
-    QStyleOptionProgressBar option;
+    QStyleOptionProgressBarV2 option;
     option.rect.setSize(size);
     // FIXME: Until http://bugreports.qt.nokia.com/browse/QTBUG-9171 is fixed,
     // we simulate one square animating across the progress bar.
@@ -265,10 +263,10 @@ void QStyleFacadeImp::paintTextField(QPainter *painter, const QStyleFacadeOption
 {
     QWidget* widget = qobject_cast<QWidget*>(widgetForPainter(painter));
 
-    MappedStyleOption<QStyleOptionFrame> panel(widget, proxyOption);
+    MappedStyleOption<QStyleOptionFrameV2> panel(widget, proxyOption);
 
     panel.lineWidth = findFrameLineWidth();
-    panel.features = QStyleOptionFrame::None;
+    panel.features = QStyleOptionFrameV2::None;
 
     style()->drawPrimitive(QStyle::PE_PanelLineEdit, &panel, painter, widget);
 }
@@ -391,7 +389,7 @@ void QStyleFacadeImp::paintProgressBar(QPainter* painter, const QStyleFacadeOpti
 {
     QWidget* widget = qobject_cast<QWidget*>(widgetForPainter(painter));
 
-    MappedStyleOption<QStyleOptionProgressBar> option(widget, proxyOption);
+    MappedStyleOption<QStyleOptionProgressBarV2> option(widget, proxyOption);
 
     option.maximum = std::numeric_limits<int>::max();
     option.minimum = 0;

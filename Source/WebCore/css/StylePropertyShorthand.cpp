@@ -344,18 +344,18 @@ const StylePropertyShorthand& webkitColumnRuleShorthand()
     return webkitColumnRuleLonghands;
 }
 
-const StylePropertyShorthand& flexFlowShorthand()
+const StylePropertyShorthand& webkitFlexFlowShorthand()
 {
-    static const CSSPropertyID flexFlowProperties[] = { CSSPropertyFlexDirection, CSSPropertyFlexWrap };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, flexFlowLonghands, (flexFlowProperties, WTF_ARRAY_LENGTH(flexFlowProperties)));
-    return flexFlowLonghands;
+    static const CSSPropertyID flexFlowProperties[] = { CSSPropertyWebkitFlexDirection, CSSPropertyWebkitFlexWrap };
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitFlexFlowLonghands, (flexFlowProperties, WTF_ARRAY_LENGTH(flexFlowProperties)));
+    return webkitFlexFlowLonghands;
 }
 
-const StylePropertyShorthand& flexShorthand()
+const StylePropertyShorthand& webkitFlexShorthand()
 {
-    static const CSSPropertyID flexProperties[] = { CSSPropertyFlexGrow, CSSPropertyFlexShrink, CSSPropertyFlexBasis };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, flexLonghands, (flexProperties, WTF_ARRAY_LENGTH(flexProperties)));
-    return flexLonghands;
+    static const CSSPropertyID flexProperties[] = { CSSPropertyWebkitFlexGrow, CSSPropertyWebkitFlexShrink, CSSPropertyWebkitFlexBasis };
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitFlexLonghands, (flexProperties, WTF_ARRAY_LENGTH(flexProperties)));
+    return webkitFlexLonghands;
 }
 
 const StylePropertyShorthand& webkitMarginCollapseShorthand()
@@ -532,10 +532,10 @@ const StylePropertyShorthand& shorthandForProperty(CSSPropertyID propertyID)
         return webkitColumnsShorthand();
     case CSSPropertyWebkitColumnRule:
         return webkitColumnRuleShorthand();
-    case CSSPropertyFlex:
-        return flexShorthand();
-    case CSSPropertyFlexFlow:
-        return flexFlowShorthand();
+    case CSSPropertyWebkitFlex:
+        return webkitFlexShorthand();
+    case CSSPropertyWebkitFlexFlow:
+        return webkitFlexFlowShorthand();
     case CSSPropertyWebkitGridColumn:
         return webkitGridColumnShorthand();
     case CSSPropertyWebkitGridRow:

@@ -30,20 +30,20 @@ class QWebInspectorPrivate;
 class QWEBKITWIDGETS_EXPORT QWebInspector : public QWidget {
     Q_OBJECT
 public:
-    explicit QWebInspector(QWidget* parent = Q_NULLPTR);
+    QWebInspector(QWidget* parent = 0);
     ~QWebInspector();
 
     void setPage(QWebPage* page);
     QWebPage* page() const;
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
-    bool event(QEvent*) Q_DECL_OVERRIDE;
+    QSize sizeHint() const;
+    bool event(QEvent*);
 
 protected:
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-    void showEvent(QShowEvent* event) Q_DECL_OVERRIDE;
-    void hideEvent(QHideEvent* event) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent* event);
+    void showEvent(QShowEvent* event);
+    void hideEvent(QHideEvent* event);
+    void closeEvent(QCloseEvent* event);
 
 private:
     QWebInspectorPrivate* d;
