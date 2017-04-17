@@ -195,14 +195,13 @@ void QWebFrameAdapter::handleGestureEvent(QGestureEventFacade* gestureEvent)
 }
 #endif
 
-QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource, const QUrl &location)
+QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource)
 {
     ScriptController* scriptController = frame->script();
     QVariant rc;
-
     if (scriptController) {
         int distance = 0;
-        ScriptValue value = scriptController->executeScript(ScriptSourceCode(scriptSource, String(location.toString(QUrl::None))));
+        ScriptValue value = scriptController->executeScript(ScriptSourceCode(scriptSource));
         JSC::ExecState* exec = scriptController->globalObject(mainThreadNormalWorld())->globalExec();
         JSValueRef* ignoredException = 0;
         exec->vm().apiLock().lock();
@@ -210,7 +209,6 @@ QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource, const
         exec->vm().apiLock().unlock();
         rc = JSC::Bindings::convertValueToQVariant(toRef(exec), valueRef, QMetaType::Void, &distance, ignoredException);
     }
-
     return rc;
 }
 

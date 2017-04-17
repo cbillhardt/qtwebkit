@@ -202,29 +202,15 @@ public:
 
     QWebHitTestResult hitTestContent(const QPoint &pos) const;
 
-    virtual bool event(QEvent *);
+    bool event(QEvent *) Q_DECL_OVERRIDE;
 
     QWebSecurityOrigin securityOrigin() const;
     QWebFrameAdapter* handle() const;
 
-#ifndef QT_NO_PRINTER
-    struct PrintCallback {
-        /// height of header in points
-        virtual qreal headerHeight() const = 0;
-        /// height of footer in points
-        virtual qreal footerHeight() const = 0;
-        /// header contents (in HTML) on page @p page
-        virtual QString header(int page, int numPages) = 0;
-        /// footer contents (in HTML) on page @p page
-        virtual QString footer(int page, int numPages) = 0;
-    };
-#endif
-
 public Q_SLOTS:
-    QVariant evaluateJavaScript(const QString& scriptSource, const QUrl& location = QUrl());
+    QVariant evaluateJavaScript(const QString& scriptSource);
 #ifndef QT_NO_PRINTER
     void print(QPrinter *printer) const;
-    void print(QPrinter *printer, PrintCallback *callback) const;
 #endif
 
 Q_SIGNALS:

@@ -1,9 +1,7 @@
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2014, International Business Machines
+ *   Copyright (C) 2003-2010, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -34,10 +32,8 @@
  *
  * The C API functions which do take a UIDNA * service object pointer
  * implement UTS #46 and IDNA2008.
- *
- * IDNA2003 is obsolete.
  * The C API functions which do not take a service object pointer
- * implement IDNA2003. They are all deprecated.
+ * implement IDNA2003.
  */
 
 /*
@@ -46,80 +42,61 @@
 enum {
     /**
      * Default options value: None of the other options are set.
-     * For use in static worker and factory methods.
      * @stable ICU 2.6
      */
     UIDNA_DEFAULT=0,
-#ifndef U_HIDE_DEPRECATED_API
     /**
      * Option to allow unassigned code points in domain names and labels.
-     * For use in static worker and factory methods.
-     * <p>This option is ignored by the UTS46 implementation.
+     * This option is ignored by the UTS46 implementation.
      * (UTS #46 disallows unassigned code points.)
-     * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+     * @stable ICU 2.6
      */
     UIDNA_ALLOW_UNASSIGNED=1,
-#endif  /* U_HIDE_DEPRECATED_API */
     /**
      * Option to check whether the input conforms to the STD3 ASCII rules,
      * for example the restriction of labels to LDH characters
      * (ASCII Letters, Digits and Hyphen-Minus).
-     * For use in static worker and factory methods.
      * @stable ICU 2.6
      */
     UIDNA_USE_STD3_RULES=2,
     /**
      * IDNA option to check for whether the input conforms to the BiDi rules.
-     * For use in static worker and factory methods.
-     * <p>This option is ignored by the IDNA2003 implementation.
+     * This option is ignored by the IDNA2003 implementation.
      * (IDNA2003 always performs a BiDi check.)
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_CHECK_BIDI=4,
     /**
      * IDNA option to check for whether the input conforms to the CONTEXTJ rules.
-     * For use in static worker and factory methods.
-     * <p>This option is ignored by the IDNA2003 implementation.
+     * This option is ignored by the IDNA2003 implementation.
      * (The CONTEXTJ check is new in IDNA2008.)
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_CHECK_CONTEXTJ=8,
     /**
      * IDNA option for nontransitional processing in ToASCII().
-     * For use in static worker and factory methods.
-     * <p>By default, ToASCII() uses transitional processing.
-     * <p>This option is ignored by the IDNA2003 implementation.
+     * By default, ToASCII() uses transitional processing.
+     * This option is ignored by the IDNA2003 implementation.
      * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_NONTRANSITIONAL_TO_ASCII=0x10,
     /**
      * IDNA option for nontransitional processing in ToUnicode().
-     * For use in static worker and factory methods.
-     * <p>By default, ToUnicode() uses transitional processing.
-     * <p>This option is ignored by the IDNA2003 implementation.
+     * By default, ToUnicode() uses transitional processing.
+     * This option is ignored by the IDNA2003 implementation.
      * (This is only relevant for compatibility of newer IDNA implementations with IDNA2003.)
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
-    UIDNA_NONTRANSITIONAL_TO_UNICODE=0x20,
-    /**
-     * IDNA option to check for whether the input conforms to the CONTEXTO rules.
-     * For use in static worker and factory methods.
-     * <p>This option is ignored by the IDNA2003 implementation.
-     * (The CONTEXTO check is new in IDNA2008.)
-     * <p>This is for use by registries for IDNA2008 conformance.
-     * UTS #46 does not require the CONTEXTO check.
-     * @stable ICU 49
-     */
-    UIDNA_CHECK_CONTEXTO=0x40
+    UIDNA_NONTRANSITIONAL_TO_UNICODE=0x20
 };
 
 /**
  * Opaque C service object type for the new IDNA API.
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
 struct UIDNA;
-typedef struct UIDNA UIDNA;  /**< C typedef for struct UIDNA. @stable ICU 4.6 */
+typedef struct UIDNA UIDNA;  /**< C typedef for struct UIDNA. @draft ICU 4.6 */
 
 /**
  * Returns a UIDNA instance which implements UTS #46.
@@ -136,17 +113,17 @@ typedef struct UIDNA UIDNA;  /**< C typedef for struct UIDNA. @stable ICU 4.6 */
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return the UTS #46 UIDNA instance, if successful
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE UIDNA * U_EXPORT2
+U_DRAFT UIDNA * U_EXPORT2
 uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode);
 
 /**
  * Closes a UIDNA instance.
  * @param idna UIDNA instance to be closed
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uidna_close(UIDNA *idna);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -160,7 +137,7 @@ U_NAMESPACE_BEGIN
  *
  * @see LocalPointerBase
  * @see LocalPointer
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUIDNAPointer, UIDNA, uidna_close);
 
@@ -176,31 +153,32 @@ U_NAMESPACE_END
  * int32_t length = uidna_nameToASCII(..., &info, &errorCode);
  * if(U_SUCCESS(errorCode) && info.errors!=0) { ... }
  * \endcode
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-typedef struct UIDNAInfo {
-    /** sizeof(UIDNAInfo) @stable ICU 4.6 */
+struct UIDNAInfo {
+    /** sizeof(UIDNAInfo) @draft ICU 4.6 */
     int16_t size;
     /**
      * Set to TRUE if transitional and nontransitional processing produce different results.
      * For details see C++ IDNAInfo::isTransitionalDifferent().
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UBool isTransitionalDifferent;
     UBool reservedB3;  /**< Reserved field, do not use. @internal */
     /**
      * Bit set indicating IDNA processing errors. 0 if no errors.
      * See UIDNA_ERROR_... constants.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     uint32_t errors;
     int32_t reservedI2;  /**< Reserved field, do not use. @internal */
     int32_t reservedI3;  /**< Reserved field, do not use. @internal */
-} UIDNAInfo;
+};
+typedef struct UIDNAInfo UIDNAInfo;
 
 /**
  * Static initializer for a UIDNAInfo struct.
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
 #define UIDNA_INFO_INITIALIZER { \
     (int16_t)sizeof(UIDNAInfo), \
@@ -228,9 +206,9 @@ typedef struct UIDNAInfo {
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_labelToASCII(const UIDNA *idna,
                    const UChar *label, int32_t length,
                    UChar *dest, int32_t capacity,
@@ -255,9 +233,9 @@ uidna_labelToASCII(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_labelToUnicode(const UIDNA *idna,
                      const UChar *label, int32_t length,
                      UChar *dest, int32_t capacity,
@@ -284,9 +262,9 @@ uidna_labelToUnicode(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_nameToASCII(const UIDNA *idna,
                   const UChar *name, int32_t length,
                   UChar *dest, int32_t capacity,
@@ -311,9 +289,9 @@ uidna_nameToASCII(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_nameToUnicode(const UIDNA *idna,
                     const UChar *name, int32_t length,
                     UChar *dest, int32_t capacity,
@@ -336,9 +314,9 @@ uidna_nameToUnicode(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_labelToASCII_UTF8(const UIDNA *idna,
                         const char *label, int32_t length,
                         char *dest, int32_t capacity,
@@ -359,9 +337,9 @@ uidna_labelToASCII_UTF8(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_labelToUnicodeUTF8(const UIDNA *idna,
                          const char *label, int32_t length,
                          char *dest, int32_t capacity,
@@ -382,9 +360,9 @@ uidna_labelToUnicodeUTF8(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_nameToASCII_UTF8(const UIDNA *idna,
                        const char *name, int32_t length,
                        char *dest, int32_t capacity,
@@ -405,9 +383,9 @@ uidna_nameToASCII_UTF8(const UIDNA *idna,
  *                  immediately. Check for U_FAILURE() on output or use with
  *                  function chaining. (See User Guide for details.)
  * @return destination string length
- * @stable ICU 4.6
+ * @draft ICU 4.6
  */
-U_STABLE int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_nameToUnicodeUTF8(const UIDNA *idna,
                         const char *name, int32_t length,
                         char *dest, int32_t capacity,
@@ -421,58 +399,58 @@ uidna_nameToUnicodeUTF8(const UIDNA *idna,
 enum {
     /**
      * A non-final domain name label (or the whole domain name) is empty.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_EMPTY_LABEL=1,
     /**
      * A domain name label is longer than 63 bytes.
      * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
      * This is only checked in ToASCII operations, and only if the output label is all-ASCII.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_LABEL_TOO_LONG=2,
     /**
      * A domain name is longer than 255 bytes in its storage form.
      * (See STD13/RFC1034 3.1. Name space specifications and terminology.)
      * This is only checked in ToASCII operations, and only if the output domain name is all-ASCII.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_DOMAIN_NAME_TOO_LONG=4,
     /**
      * A label starts with a hyphen-minus ('-').
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_LEADING_HYPHEN=8,
     /**
      * A label ends with a hyphen-minus ('-').
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_TRAILING_HYPHEN=0x10,
     /**
      * A label contains hyphen-minus ('-') in the third and fourth positions.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_HYPHEN_3_4=0x20,
     /**
      * A label starts with a combining mark.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_LEADING_COMBINING_MARK=0x40,
     /**
      * A label or domain name contains disallowed characters.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_DISALLOWED=0x80,
     /**
      * A label starts with "xn--" but does not contain valid Punycode.
      * That is, an xn-- label failed Punycode decoding.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_PUNYCODE=0x100,
     /**
      * A label contains a dot=full stop.
      * This can occur in an input string for a single-label function.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_LABEL_HAS_DOT=0x200,
     /**
@@ -481,35 +459,20 @@ enum {
      * string had severe validation errors. For example,
      * it might contain characters that are not allowed in ACE labels,
      * or it might not be normalized.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_INVALID_ACE_LABEL=0x400,
     /**
      * A label does not meet the IDNA BiDi requirements (for right-to-left characters).
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
     UIDNA_ERROR_BIDI=0x800,
     /**
      * A label does not meet the IDNA CONTEXTJ requirements.
-     * @stable ICU 4.6
+     * @draft ICU 4.6
      */
-    UIDNA_ERROR_CONTEXTJ=0x1000,
-    /**
-     * A label does not meet the IDNA CONTEXTO requirements for punctuation characters.
-     * Some punctuation characters "Would otherwise have been DISALLOWED"
-     * but are allowed in certain contexts. (RFC 5892)
-     * @stable ICU 49
-     */
-    UIDNA_ERROR_CONTEXTO_PUNCTUATION=0x2000,
-    /**
-     * A label does not meet the IDNA CONTEXTO requirements for digits.
-     * Arabic-Indic Digits (U+066x) must not be mixed with Extended Arabic-Indic Digits (U+06Fx).
-     * @stable ICU 49
-     */
-    UIDNA_ERROR_CONTEXTO_DIGITS=0x4000
+    UIDNA_ERROR_CONTEXTJ=0x1000
 };
-
-#ifndef U_HIDE_DEPRECATED_API
 
 /* IDNA2003 API ------------------------------------------------------------- */
 
@@ -570,9 +533,9 @@ enum {
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
- * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+ * @stable ICU 2.6
  */
-U_DEPRECATED int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -618,9 +581,9 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
- * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+ * @stable ICU 2.6
  */
-U_DEPRECATED int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_toUnicode(const UChar* src, int32_t srcLength,
                 UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -669,9 +632,9 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
- * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+ * @stable ICU 2.6
  */
-U_DEPRECATED int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
@@ -716,9 +679,9 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
  *                          U_BUFFER_OVERFLOW_ERROR if destCapacity is not enough
  * @return The length of the result string, if successful - or in case of a buffer overflow,
  *         in which case it will be greater than destCapacity.
- * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+ * @stable ICU 2.6
  */
-U_DEPRECATED int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UChar* dest, int32_t destCapacity,
                      int32_t options,
@@ -757,15 +720,13 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @param status            ICU error code in/out parameter.
  *                          Must fulfill U_SUCCESS before the function call.
  * @return <0 or 0 or >0 as usual for string comparisons
- * @deprecated ICU 55 Use UTS #46 instead via uidna_openUTS46() or class IDNA.
+ * @stable ICU 2.6
  */
-U_DEPRECATED int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,
                 UErrorCode* status);
-
-#endif  /* U_HIDE_DEPRECATED_API */
 
 #endif /* #if !UCONFIG_NO_IDNA */
 

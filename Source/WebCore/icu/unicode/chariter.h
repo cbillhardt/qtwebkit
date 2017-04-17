@@ -1,9 +1,7 @@
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ********************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
@@ -362,12 +360,6 @@ public:
      * @stable ICU 2.0
      */
     enum EOrigin { kStart, kCurrent, kEnd };
-
-    /**
-     * Destructor.
-     * @stable ICU 2.0
-     */
-    virtual ~CharacterIterator();
 
     /**
      * Returns a pointer to a new CharacterIterator of the same

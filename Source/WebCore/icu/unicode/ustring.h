@@ -1,8 +1,6 @@
-// Copyright (C) 2016 and later: Unicode, Inc. and others.
-// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
-*   Copyright (C) 1998-2014, International Business Machines
+*   Copyright (C) 1998-2010, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -22,14 +20,9 @@
 #include "unicode/putil.h"
 #include "unicode/uiter.h"
 
-/**
- * \def UBRK_TYPEDEF_UBREAK_ITERATOR
- * @internal 
- */
-
+/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
-/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
     typedef struct UBreakIterator UBreakIterator;
 #endif
 
@@ -153,8 +146,8 @@ u_strcat(UChar     *dst,
  * If <code>n&lt;=0</code> then dst is not modified.
  *
  * @param dst The destination string.
- * @param src The source string (can be NULL/invalid if n<=0).
- * @param n The maximum number of characters to append; no-op if <=0.
+ * @param src The source string.
+ * @param n The maximum number of characters to append.
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
@@ -557,9 +550,9 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * Compare two ustrings for bitwise equality. 
  * Compares at most <code>n</code> characters.
  *
- * @param ucs1 A string to compare (can be NULL/invalid if n<=0).
- * @param ucs2 A string to compare (can be NULL/invalid if n<=0).
- * @param n The maximum number of characters to compare; always returns 0 if n<=0.
+ * @param ucs1 A string to compare.
+ * @param ucs2 A string to compare.
+ * @param n The maximum number of characters to compare.
  * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
  * value if <code>s1</code> is bitwise less than <code>s2</code>; a positive
  * value if <code>s1</code> is bitwise greater than <code>s2</code>.
@@ -674,8 +667,8 @@ u_strcpy(UChar     *dst,
  * if the length of <code>src</code> is less than <code>n</code>.
  *
  * @param dst The destination string.
- * @param src The source string (can be NULL/invalid if n<=0).
- * @param n The maximum number of characters to copy; no-op if <=0.
+ * @param src The source string.
+ * @param n The maximum number of characters to copy.
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
@@ -749,8 +742,8 @@ U_STABLE char* U_EXPORT2 u_austrncpy(char *dst,
 /**
  * Synonym for memcpy(), but with UChars only.
  * @param dest The destination string
- * @param src The source string (can be NULL/invalid if count<=0)
- * @param count The number of characters to copy; no-op if <=0
+ * @param src The source string
+ * @param count The number of characters to copy
  * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
@@ -760,8 +753,8 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
 /**
  * Synonym for memmove(), but with UChars only.
  * @param dest The destination string
- * @param src The source string (can be NULL/invalid if count<=0)
- * @param count The number of characters to move; no-op if <=0
+ * @param src The source string
+ * @param count The number of characters to move
  * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
@@ -925,7 +918,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  *    }
  * </pre>
  * 
- * Note that the macros will NOT consistently work if their argument is another <code>#define</code>. 
+ * Note that the macros will NOT consistently work if their argument is another #define. 
  *  The following will not work on all platforms, don't use it.
  * 
  * <pre>
@@ -941,7 +934,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * @stable ICU 2.0
  */
 #if defined(U_DECLARE_UTF16)
-#   define U_STRING_DECL(var, cs, length) static const UChar *var=(const UChar *)U_DECLARE_UTF16(cs)
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]=U_DECLARE_UTF16(cs)
     /**@stable ICU 2.0 */
 #   define U_STRING_INIT(var, cs, length)
 #elif U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
@@ -949,7 +942,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
     /**@stable ICU 2.0 */
 #   define U_STRING_INIT(var, cs, length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]=cs
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)cs }
     /**@stable ICU 2.0 */
 #   define U_STRING_INIT(var, cs, length)
 #else
@@ -1161,12 +1154,10 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
 #endif
 
 /**
- * Case-folds the characters in a string.
- *
+ * Case-fold the characters in a string.
  * Case-folding is locale-independent and not context-sensitive,
  * but there is an option for whether to include or exclude mappings for dotted I
- * and dotless i that are marked with 'T' in CaseFolding.txt.
- *
+ * and dotless i that are marked with 'I' in CaseFolding.txt.
  * The result may be longer or shorter than the original.
  * The source string and the destination buffer are allowed to overlap.
  *
@@ -1313,6 +1304,7 @@ u_strFromUTF8(UChar *dest,
 
 /**
  * Convert a UTF-16 string to UTF-8.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * Same as u_strToUTF8() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
@@ -1357,6 +1349,7 @@ u_strToUTF8WithSub(char *dest,
 
 /**
  * Convert a UTF-8 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * Same as u_strFromUTF8() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
@@ -1521,6 +1514,7 @@ u_strFromUTF32(UChar   *dest,
 
 /**
  * Convert a UTF-16 string to UTF-32.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * Same as u_strToUTF32() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
@@ -1565,6 +1559,7 @@ u_strToUTF32WithSub(UChar32 *dest,
 
 /**
  * Convert a UTF-32 string to UTF-16.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * Same as u_strFromUTF32() except for the additional subchar which is output for
  * illegal input sequences, instead of stopping with the U_INVALID_CHAR_FOUND error code.
@@ -1650,8 +1645,7 @@ u_strToJavaModifiedUTF8(
 
 /**
  * Convert a Java Modified UTF-8 string to a 16-bit Unicode string.
- * If the input string is not well-formed and no substitution char is specified, 
- * then the U_INVALID_CHAR_FOUND error code is set.
+ * If the input string is not well-formed, then the U_INVALID_CHAR_FOUND error code is set.
  *
  * This function behaves according to the documentation for Java DataInput.readUTF()
  * except that it takes a length parameter rather than
