@@ -1,4 +1,6 @@
-// Copyright (C) 2010, International Business Machines
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Copyright (C) 2009-2013, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2001 and onwards Google Inc.
@@ -40,9 +42,9 @@ U_NAMESPACE_BEGIN
  * in a "const char*" or a "string" wherever a "StringPiece" is
  * expected.
  *
- * Functions or methods may use const StringPiece& parameters to accept either
- * a "const char*" or a "string" value that will be implicitly converted to
- * a StringPiece.
+ * Functions or methods may use StringPiece parameters to accept either a
+ * "const char*" or a "string" value that will be implicitly converted to a
+ * StringPiece.
  *
  * Systematic usage of StringPiece is encouraged as it will reduce unnecessary
  * conversions from "const char*" to "string" and back again.
@@ -71,7 +73,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * Constructs from a std::string.
    * @stable ICU 4.2
    */
-  StringPiece(const U_STD_NSQ string& str)
+  StringPiece(const std::string& str)
     : ptr_(str.data()), length_(static_cast<int32_t>(str.size())) { }
 #endif
   /**
@@ -136,16 +138,16 @@ class U_COMMON_API StringPiece : public UMemory {
 
   /**
    * Reset the stringpiece to refer to new data.
-   * @param data pointer the new string data.  Need not be nul terminated.
+   * @param xdata pointer the new string data.  Need not be nul terminated.
    * @param len the length of the new data
-   * @internal
+   * @stable ICU 4.8
    */
-  void set(const char* data, int32_t len) { ptr_ = data; length_ = len; }
+  void set(const char* xdata, int32_t len) { ptr_ = xdata; length_ = len; }
 
   /**
    * Reset the stringpiece to refer to new data.
    * @param str a pointer to a NUL-terminated string. 
-   * @internal
+   * @stable ICU 4.8
    */
   void set(const char* str);
 
@@ -183,7 +185,7 @@ class U_COMMON_API StringPiece : public UMemory {
    * Maximum integer, used as a default value for substring methods.
    * @stable ICU 4.2
    */
-  static const int32_t npos = 0x7fffffff;
+  static const int32_t npos; // = 0x7fffffff;
 
   /**
    * Returns a substring of this StringPiece.
@@ -203,7 +205,7 @@ class U_COMMON_API StringPiece : public UMemory {
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
  * @return TRUE if the string data is equal
- * @internal
+ * @stable ICU 4.8
  */
 U_EXPORT UBool U_EXPORT2 
 operator==(const StringPiece& x, const StringPiece& y);
@@ -213,7 +215,7 @@ operator==(const StringPiece& x, const StringPiece& y);
  * @param x The first StringPiece to compare.
  * @param y The second StringPiece to compare.
  * @return TRUE if the string data is not equal
- * @internal
+ * @stable ICU 4.8
  */
 inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
   return !(x == y);
