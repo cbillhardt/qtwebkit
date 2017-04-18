@@ -31,11 +31,7 @@
 
 #include <wtf/Noncopyable.h>
 
-#ifdef Q_FORWARD_DECLARE_OBJC_CLASS
-Q_FORWARD_DECLARE_OBJC_CLASS(NSAutoreleasePool);
-#else
 OBJC_CLASS NSAutoreleasePool;
-#endif
 
 namespace WTF {
 

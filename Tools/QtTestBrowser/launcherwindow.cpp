@@ -782,7 +782,7 @@ void LauncherWindow::print()
 
 void LauncherWindow::screenshot()
 {
-    QPixmap pixmap = m_view->grab();
+    QPixmap pixmap = QPixmap::grabWidget(m_view);
     QLabel* label = 0;
     label = new QLabel;
     label->setAttribute(Qt::WA_DeleteOnClose);

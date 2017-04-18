@@ -146,7 +146,7 @@ QStyle* PageClientQWidget::style() const
 
 QRectF PageClientQWidget::windowRect() const
 {
-    return QRectF(view->window()->frameGeometry());
+    return QRectF(view->window()->geometry());
 }
 
 void PageClientQWidget::setWidgetVisible(Widget* widget, bool visible)

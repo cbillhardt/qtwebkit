@@ -1260,7 +1260,6 @@ static EDisplay equivalentBlockDisplay(EDisplay display, bool isFloating, bool s
     case TABLE:
     case BOX:
     case FLEX:
-    case WEBKIT_FLEX:
     case GRID:
         return display;
 
@@ -1274,7 +1273,6 @@ static EDisplay equivalentBlockDisplay(EDisplay display, bool isFloating, bool s
     case INLINE_BOX:
         return BOX;
     case INLINE_FLEX:
-    case WEBKIT_INLINE_FLEX:
         return FLEX;
     case INLINE_GRID:
         return GRID;
@@ -2441,8 +2439,8 @@ void StyleResolver::applyProperty(CSSPropertyID id, CSSValue* value)
     case CSSPropertyWebkitBorderRadius:
     case CSSPropertyWebkitColumns:
     case CSSPropertyWebkitColumnRule:
-    case CSSPropertyFlex:
-    case CSSPropertyFlexFlow:
+    case CSSPropertyWebkitFlex:
+    case CSSPropertyWebkitFlexFlow:
     case CSSPropertyWebkitGridColumn:
     case CSSPropertyWebkitGridRow:
     case CSSPropertyWebkitMarginCollapse:
@@ -3014,16 +3012,16 @@ void StyleResolver::applyProperty(CSSPropertyID id, CSSValue* value)
 #if ENABLE(CURSOR_VISIBILITY)
     case CSSPropertyWebkitCursorVisibility:
 #endif
-    case CSSPropertyAlignContent:
-    case CSSPropertyAlignItems:
-    case CSSPropertyAlignSelf:
-    case CSSPropertyFlexBasis:
-    case CSSPropertyFlexDirection:
-    case CSSPropertyFlexGrow:
-    case CSSPropertyFlexShrink:
-    case CSSPropertyFlexWrap:
-    case CSSPropertyJustifyContent:
-    case CSSPropertyOrder:
+    case CSSPropertyWebkitAlignContent:
+    case CSSPropertyWebkitAlignItems:
+    case CSSPropertyWebkitAlignSelf:
+    case CSSPropertyWebkitFlexBasis:
+    case CSSPropertyWebkitFlexDirection:
+    case CSSPropertyWebkitFlexGrow:
+    case CSSPropertyWebkitFlexShrink:
+    case CSSPropertyWebkitFlexWrap:
+    case CSSPropertyWebkitJustifyContent:
+    case CSSPropertyWebkitOrder:
 #if ENABLE(CSS_REGIONS)
     case CSSPropertyWebkitFlowFrom:
     case CSSPropertyWebkitFlowInto:

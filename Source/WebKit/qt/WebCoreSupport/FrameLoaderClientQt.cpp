@@ -735,10 +735,8 @@ void FrameLoaderClientQt::dispatchDidClearWindowObjectInWorld(DOMWrapperWorld* w
     if (world != mainThreadNormalWorld())
         return;
 
-    if (m_webFrame) {
+    if (m_webFrame)
         m_webFrame->didClearWindowObject();
-        m_webFrame->pageAdapter->clearCustomActions();
-    }
 }
 
 void FrameLoaderClientQt::documentElementAvailable()

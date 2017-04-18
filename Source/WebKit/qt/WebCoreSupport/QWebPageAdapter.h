@@ -168,6 +168,7 @@ public:
     virtual QSize viewportSize() const = 0;
     virtual QWebPageAdapter* createWindow(bool /*dialog*/) = 0;
     virtual QObject* handle() = 0;
+    virtual void javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack) = 0;
     virtual void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID) = 0;
     virtual void javaScriptAlert(QWebFrameAdapter*, const QString& msg) = 0;
     virtual bool javaScriptConfirm(QWebFrameAdapter*, const QString& msg) = 0;
@@ -204,7 +205,6 @@ public:
     virtual void createUndoStep(QSharedPointer<UndoStepQt>) = 0;
 
     virtual void updateNavigationActions() = 0;
-    virtual void clearCustomActions() = 0;
 
     virtual QWebFrameAdapter* mainFrameAdapter() = 0;
 
@@ -250,7 +250,7 @@ public:
             Separator,
             SubMenu
         } type;
-        int action;
+        MenuAction action;
         enum Trait {
             None = 0,
             Enabled = 1,
@@ -318,7 +318,6 @@ public:
     QWebHitTestResultPrivate* updatePositionDependentMenuActions(const QPoint&, QBitArray*);
     void updateActionInternal(MenuAction, const char* commandName, bool* enabled, bool* checked);
     void triggerAction(MenuAction, QWebHitTestResultPrivate*, const char* commandName, bool endToEndReload);
-    void triggerCustomAction(int action, const QString &title);
     QString contextMenuItemTagForAction(MenuAction, bool* checkable) const;
 
     QStringList supportedContentTypes() const;

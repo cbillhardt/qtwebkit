@@ -122,7 +122,6 @@ public:
     bool transparentBackground() const;
     void setNavigatorQtObjectEnabled(bool);
     void updateUserScripts();
-    void updateUserStyleSheets();
     void updateSchemeDelegates();
 
     QPointF contentPos() const;
@@ -215,7 +214,6 @@ protected:
     QQmlComponent* colorChooser;
 
     QList<QUrl> userScripts;
-    QList<QUrl> userStyleSheets;
 
     bool m_betweenLoadCommitAndFirstFrame;
     bool m_useDefaultContentItemSize;
@@ -231,28 +229,28 @@ class QQuickWebViewLegacyPrivate : public QQuickWebViewPrivate {
     Q_DECLARE_PUBLIC(QQuickWebView)
 public:
     QQuickWebViewLegacyPrivate(QQuickWebView* viewport);
-    void initialize(WKContextRef contextRef = 0, WKPageGroupRef pageGroupRef = 0) Q_DECL_OVERRIDE;
+    virtual void initialize(WKContextRef contextRef = 0, WKPageGroupRef pageGroupRef = 0);
 
-    void updateViewportSize() Q_DECL_OVERRIDE;
+    virtual void updateViewportSize();
 
-    qreal zoomFactor() const Q_DECL_OVERRIDE;
-    void setZoomFactor(qreal) Q_DECL_OVERRIDE;
+    qreal zoomFactor() const;
+    void setZoomFactor(qreal);
 };
 
 class QQuickWebViewFlickablePrivate : public QQuickWebViewPrivate {
     Q_DECLARE_PUBLIC(QQuickWebView)
 public:
     QQuickWebViewFlickablePrivate(QQuickWebView* viewport);
-    void initialize(WKContextRef contextRef = 0, WKPageGroupRef pageGroupRef = 0) Q_DECL_OVERRIDE;
+    virtual void initialize(WKContextRef contextRef = 0, WKPageGroupRef pageGroupRef = 0);
 
-    void onComponentComplete() Q_DECL_OVERRIDE;
+    virtual void onComponentComplete();
 
-    void didChangeViewportProperties(const WebCore::ViewportAttributes&) Q_DECL_OVERRIDE;
-    WebKit::PageViewportController* viewportController() const Q_DECL_OVERRIDE { return m_pageViewportController.data(); }
-    void updateViewportSize() Q_DECL_OVERRIDE;
+    virtual void didChangeViewportProperties(const WebCore::ViewportAttributes&);
+    virtual WebKit::PageViewportController* viewportController() const { return m_pageViewportController.data(); }
+    virtual void updateViewportSize();
 
-    void pageDidRequestScroll(const QPoint& pos) Q_DECL_OVERRIDE;
-    void handleMouseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+    virtual void pageDidRequestScroll(const QPoint& pos);
+    virtual void handleMouseEvent(QMouseEvent*);
 
 private:
     QScopedPointer<WebKit::PageViewportController> m_pageViewportController;

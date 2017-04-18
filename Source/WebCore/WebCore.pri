@@ -16,7 +16,6 @@ INCLUDEPATH += \
     $$SOURCE_DIR/Modules/filesystem \
     $$SOURCE_DIR/Modules/geolocation \
     $$SOURCE_DIR/Modules/indexeddb \
-    $$SOURCE_DIR/Modules/mediasource \
     $$SOURCE_DIR/Modules/navigatorcontentutils \
     $$SOURCE_DIR/Modules/notifications \
     $$SOURCE_DIR/Modules/proximity \
@@ -122,7 +121,11 @@ enable?(XSLT) {
         QT *= xmlpatterns
     }
 } else:!mac:use?(LIBXML2) {
-    PKGCONFIG += libxml-2.0
+    win32-msvc* {
+        LIBS += -llibxml2
+    } else {
+        PKGCONFIG += libxml-2.0
+    }
 }
 
 use?(ZLIB) {
@@ -210,8 +213,8 @@ use?(3D_GRAPHICS) {
     win32: {
         mingw: {
             # Make sure OpenGL libs are after the webcore lib so MinGW can resolve symbols
-            qtConfig(opengles2) {
-                CONFIG(debug, debug|release):qtConfig(angle) {
+            contains(QT_CONFIG, opengles2) {
+                CONFIG(debug, debug|release):contains(QT_CONFIG, angle) {
                     LIBS += $$QMAKE_LIBS_OPENGL_ES2_DEBUG
                 } else {
                     LIBS += $$QMAKE_LIBS_OPENGL_ES2
@@ -221,7 +224,7 @@ use?(3D_GRAPHICS) {
             }
         }
     } else {
-        qtConfig(opengles2): CONFIG += egl
+        contains(QT_CONFIG, opengles2): CONFIG += egl
     }
 }
 
@@ -234,7 +237,7 @@ use?(GRAPHICS_SURFACE) {
 }
 
 have?(sqlite3) {
-    osx|!qtConfig(pkg-config) {
+    mac {
         LIBS += -lsqlite3
     } else {
         PKGCONFIG += sqlite3

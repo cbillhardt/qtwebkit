@@ -37,7 +37,7 @@ equals(OUT_PWD, $${ROOT_BUILD_DIR}) {
 }
 
 # Try to detect if we're running under Windows cmd.exe or not
-equals(QMAKE_DIR_SEP, \\): CONFIG += win_cmd_shell
+win32:isEmpty(MINGW_IN_SHELL): CONFIG += win_cmd_shell
 
 # Default location of generated sources
 GENERATED_SOURCES_DESTDIR = generated
@@ -61,6 +61,10 @@ win32-msvc*: MAKEFILE_NOOP_COMMAND = @echo >NUL
 # Set up a default python version
 scratchbox: PYTHON = python2.6
 else: PYTHON = python
+
+# We use private_tests to detect developer build, since the destdir will
+# always be our webkit build dir. This might change as configure changes.
+contains(QT_CONFIG, private_tests): CONFIG += qt_developer_build
 
 # By default we enable "production build", and build-webkit, which is
 # used by bots and developers, will disable it, to enable warnings etc.
@@ -88,7 +92,7 @@ CONFIG += include_webinspector
 # as the module will be linked with. This is particular important on mac
 # since otherwise the libraries can be compiled against libstdc++, but
 # linked against libc++.
-qtConfig(c++11): CONFIG += c++11
+contains(QT_CONFIG, c++11): CONFIG += c++11
 
 # Limit the creation of thin archives to Linux, since only GNU's ar supports it.
 !debug_and_release:linux: CONFIG += gnu_thin_archives
@@ -98,7 +102,8 @@ gcc:isEqual(QT_ARCH, "arm"): CONFIG -= use_gold_linker
 
 # Pick up Qt's defaults for debug/release/debug_and_release
 if(win32|mac):!macx-xcode {
-    qtConfig(debug_and_release): CONFIG += debug_and_release build_all
+    contains(QT_CONFIG, debug_and_release): CONFIG += debug_and_release
+    contains(QT_CONFIG, build_all): CONFIG += build_all
 }
 
 FLEX = flex

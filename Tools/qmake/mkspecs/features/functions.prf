@@ -269,8 +269,7 @@ defineTest(linkAgainstLibrary) {
         mac {
             LIBS += -Wl,-force_load,$${path}$${QMAKE_DIR_SEP}lib$${target}.a
         } else:win32-msvc*|wince*|win32-icc {
-            LIBS += -l$$target
-            QMAKE_LFLAGS += /OPT:REF
+            LIBS += /OPT:REF -l$$target
         } else {
             CONFIG *= no_smart_library_merge
             LIBS += -Wl,-whole-archive -l$$target -Wl,-no-whole-archive
@@ -293,7 +292,7 @@ defineTest(linkAgainstLibrary) {
 }
 
 defineTest(xlibAvailable) {
-    qtConfig(xcb):qtConfig(xcb-xlib) {
+    contains(QT_CONFIG, xcb-xlib) {
         return(true)
     } else {
         return(false)
@@ -350,10 +349,6 @@ defineReplace(configDefines) {
         match = $$find(config, "^plugin_architecture_")
         !isEmpty(match) {
             plugin_architecture: defines += $$upper($$config)=1
-            next()
-        }
-        equals(config, "use_system_malloc") {
-            use: defines += $$upper($$config)=1
             next()
         }
         match = $$find(config, "^use_")

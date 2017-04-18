@@ -1,4 +1,6 @@
-// Copyright (C) 2009-2010, International Business Machines
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+// Copyright (C) 2009-2012, International Business Machines
 // Corporation and others. All Rights Reserved.
 //
 // Copyright 2007 Google Inc. All Rights Reserved.
@@ -56,7 +58,7 @@ public:
    * Virtual destructor.
    * @stable ICU 4.2
    */
-  virtual ~ByteSink() { }
+  virtual ~ByteSink();
 
   /**
    * Append "bytes[0,n-1]" to this.
@@ -150,12 +152,17 @@ public:
    */
   CheckedArrayByteSink(char* outbuf, int32_t capacity);
   /**
+   * Destructor.
+   * @stable ICU 4.2
+   */
+  virtual ~CheckedArrayByteSink();
+  /**
    * Returns the sink to its original state, without modifying the buffer.
    * Useful for reusing both the buffer and the sink for multiple streams.
    * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
    * and Overflowed()=FALSE.
    * @return *this
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   virtual CheckedArrayByteSink& Reset();
   /**
@@ -201,7 +208,7 @@ public:
    * If Overflowed() then NumberOfBytesAppended()>NumberOfBytesWritten()
    * else they return the same number.
    * @return number of bytes written to the buffer
-   * @draft ICU 4.6
+   * @stable ICU 4.6
    */
   int32_t NumberOfBytesAppended() const { return appended_; }
 private:

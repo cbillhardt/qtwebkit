@@ -48,7 +48,7 @@ public:
         QList<MimeType> mimeTypes;
     };
 
-    explicit QWebPluginFactory(QObject* parent = Q_NULLPTR);
+    explicit QWebPluginFactory(QObject* parent = 0);
     virtual ~QWebPluginFactory();
 
     virtual QList<Plugin> plugins() const = 0;
@@ -62,7 +62,7 @@ public:
     {};
     class ExtensionReturn
     {};
-    virtual bool extension(Extension extension, const ExtensionOption* option = Q_NULLPTR, ExtensionReturn* output = Q_NULLPTR);
+    virtual bool extension(Extension extension, const ExtensionOption* option = 0, ExtensionReturn* output = 0);
     virtual bool supportsExtension(Extension extension) const;
 
 private:

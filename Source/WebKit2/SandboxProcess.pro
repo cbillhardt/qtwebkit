@@ -16,8 +16,7 @@ SOURCES += Shared/linux/SandboxProcess/SandboxEnvironmentLinux.cpp
 HEADERS += Shared/linux/SandboxProcess/SandboxEnvironmentLinux.h
 
 INSTALLS += target
-LIBS += -lcap
-QMAKE_USE += libdl
+LIBS += -lcap -ldl
 
 isEmpty(INSTALL_BINS) {
     target.path = $$[QT_INSTALL_BINS]

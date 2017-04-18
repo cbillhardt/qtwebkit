@@ -142,11 +142,11 @@ HEADERS += \
     $$PWD/WebKit/qt/WidgetSupport/QStyleFacadeImp.h \
     $$PWD/WebKit/qt/WidgetSupport/QWidgetPluginImpl.h \
 
-!qtConfig(static) {
+!contains(QT_CONFIG, static) {
     HEADERS += $$PWD/WebKit/qt/Api/qwebkitplatformplugin.h
 }
 
-qtConfig(accessibility) {
+contains(QT_CONFIG, accessibility) {
     SOURCES += $$PWD/WebKit/qt/WidgetApi/qwebviewaccessible.cpp
     HEADERS += $$PWD/WebKit/qt/WidgetApi/qwebviewaccessible_p.h 
 }

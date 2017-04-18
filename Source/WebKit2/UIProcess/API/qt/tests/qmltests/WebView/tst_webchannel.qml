@@ -64,7 +64,7 @@ Item {
 
     TestWebView {
         id: webView
-        experimental.webChannel.registeredObjects: [testObject]
+        experimental.windowObjects: [testObject]
         experimental.preferences.developerExtrasEnabled: true
     }
 

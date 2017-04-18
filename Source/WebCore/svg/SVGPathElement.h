@@ -83,10 +83,10 @@ public:
     PassRefPtr<SVGPathSegCurvetoQuadraticSmoothRel> createSVGPathSegCurvetoQuadraticSmoothRel(float x, float y, SVGPathSegRole role = PathSegUndefinedRole);
 
     // Used in the bindings only.
-    RefPtr<SVGPathSegListPropertyTearOff> pathSegList();
-    RefPtr<SVGPathSegListPropertyTearOff> animatedPathSegList();
-    RefPtr<SVGPathSegListPropertyTearOff> normalizedPathSegList();
-    RefPtr<SVGPathSegListPropertyTearOff> animatedNormalizedPathSegList();
+    SVGPathSegListPropertyTearOff* pathSegList();
+    SVGPathSegListPropertyTearOff* animatedPathSegList();
+    SVGPathSegListPropertyTearOff* normalizedPathSegList();
+    SVGPathSegListPropertyTearOff* animatedNormalizedPathSegList();
 
     SVGPathByteStream* pathByteStream() const;
 
@@ -98,9 +98,7 @@ public:
 
     bool isAnimValObserved() const { return m_isAnimValObserved; }
 
-    void animatedPropertyWillBeDeleted();
-
- private:
+private:
     SVGPathElement(const QualifiedName&, Document*);
 
     virtual bool isValid() const { return SVGTests::isValid(); }

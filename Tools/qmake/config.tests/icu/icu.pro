@@ -13,8 +13,13 @@ win32 {
     } else {
         LIBS += -licuin -licuuc -licudt
     }
-} else:qtConfig(pkg-config):packagesExist("icu-i18n") {
+} else:!contains(QT_CONFIG,no-pkg-config):packagesExist("icu-i18n") {
     PKGCONFIG += icu-i18n
 } else {
     LIBS += -licui18n -licuuc -licudata
+    CONFIG(static) {
+        LIBS += -ldl
+    }
 }
+
+load(qt_build_config)

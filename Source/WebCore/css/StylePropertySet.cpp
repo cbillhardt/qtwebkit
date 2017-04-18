@@ -160,10 +160,10 @@ String StylePropertySet::getPropertyValue(CSSPropertyID propertyID) const
         return getShorthandValue(webkitColumnRuleShorthand());
     case CSSPropertyWebkitColumns:
         return getShorthandValue(webkitColumnsShorthand());
-    case CSSPropertyFlex:
-        return getShorthandValue(flexShorthand());
-    case CSSPropertyFlexFlow:
-        return getShorthandValue(flexFlowShorthand());
+    case CSSPropertyWebkitFlex:
+        return getShorthandValue(webkitFlexShorthand());
+    case CSSPropertyWebkitFlexFlow:
+        return getShorthandValue(webkitFlexFlowShorthand());
     case CSSPropertyWebkitGridColumn:
         return getShorthandValue(webkitGridColumnShorthand());
     case CSSPropertyWebkitGridRow:
@@ -886,14 +886,14 @@ String StylePropertySet::asText() const
         case CSSPropertyWebkitAnimationFillMode:
             shorthandPropertyID = CSSPropertyWebkitAnimation;
             break;
-        case CSSPropertyFlexDirection:
-        case CSSPropertyFlexWrap:
-            shorthandPropertyID = CSSPropertyFlexFlow;
+        case CSSPropertyWebkitFlexDirection:
+        case CSSPropertyWebkitFlexWrap:
+            shorthandPropertyID = CSSPropertyWebkitFlexFlow;
             break;
-        case CSSPropertyFlexBasis:
-        case CSSPropertyFlexGrow:
-        case CSSPropertyFlexShrink:
-            shorthandPropertyID = CSSPropertyFlex;
+        case CSSPropertyWebkitFlexBasis:
+        case CSSPropertyWebkitFlexGrow:
+        case CSSPropertyWebkitFlexShrink:
+            shorthandPropertyID = CSSPropertyWebkitFlex;
             break;
         case CSSPropertyWebkitMaskPositionX:
         case CSSPropertyWebkitMaskPositionY:

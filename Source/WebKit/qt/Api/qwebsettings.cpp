@@ -310,6 +310,10 @@ void QWebSettingsPrivate::apply()
         settings->setNeedsSiteSpecificQuirks(value);
 
         settings->setUsesPageCache(WebCore::pageCache()->capacity());
+
+        value = attributes.value(QWebSettings::WebSecurityEnabled,
+                                              global->attributes.value(QWebSettings::WebSecurityEnabled));
+        settings->setWebSecurityEnabled(value);
     } else {
         QList<QWebSettingsPrivate*> settings = *::allSettings();
         for (int i = 0; i < settings.count(); ++i)
@@ -455,7 +459,7 @@ QWebSettings* QWebSettings::globalSettings()
     \value PrivateBrowsingEnabled Private browsing prevents WebKit from
         recording visited pages in the history and storing web page icons. This is disabled by default.
     \value JavascriptCanOpenWindows Specifies whether JavaScript programs
-        can open popup windows without user interaction. This is disabled by default.
+        can open new windows. This is disabled by default.
     \value JavascriptCanCloseWindows Specifies whether JavaScript programs
         can close windows. This is disabled by default.
     \value JavascriptCanAccessClipboard Specifies whether JavaScript programs
@@ -587,6 +591,7 @@ QWebSettings::QWebSettings()
     d->attributes.insert(QWebSettings::CaretBrowsingEnabled, false);
     d->attributes.insert(QWebSettings::NotificationsEnabled, true);
     d->attributes.insert(QWebSettings::Accelerated2dCanvasEnabled, false);
+    d->attributes.insert(QWebSettings::WebSecurityEnabled, true);
     d->offlineStorageDefaultQuota = 5 * 1024 * 1024;
     d->defaultTextEncoding = QLatin1String("iso-8859-1");
     d->thirdPartyCookiePolicy = AlwaysAllowThirdPartyCookies;

@@ -858,7 +858,7 @@ void QWebPageAdapter::dynamicPropertyChangeEvent(QObject* obj, QDynamicPropertyC
         QVariant port = obj->property("_q_webInspectorServerPort");
         if (port.isValid()) {
             InspectorServerQt* inspectorServer = InspectorServerQt::server();
-            inspectorServer->listen(port.toInt());
+            obj->setProperty("_q_webInspectorServerPort", inspectorServer->listen(port.toInt()));
         }
 #endif
     } else if (event->propertyName() == "_q_deadDecodedDataDeletionInterval") {
@@ -874,11 +874,8 @@ void QWebPageAdapter::dynamicPropertyChangeEvent(QObject* obj, QDynamicPropertyC
 #define MAP_ACTION_FROM_VALUE(Name, Value) \
     case Value: return QWebPageAdapter::Name
 
-static int adapterActionForContextMenuAction(WebCore::ContextMenuAction action)
+static QWebPageAdapter::MenuAction adapterActionForContextMenuAction(WebCore::ContextMenuAction action)
 {
-    if (action >= ContextMenuItemBaseCustomTag && action <= ContextMenuItemLastCustomTag)
-        return action;
-
     switch (action) {
         FOR_EACH_MAPPED_MENU_ACTION(MAP_ACTION_FROM_VALUE, SEMICOLON_SEPARATOR);
 #if ENABLE(INSPECTOR)
@@ -902,7 +899,7 @@ QList<MenuItem> descriptionForPlatformMenu(const Vector<ContextMenuItem>& items,
         switch (item.type()) {
         case WebCore::CheckableActionType: /* fall through */
         case WebCore::ActionType: {
-            int action = adapterActionForContextMenuAction(item.action());
+            QWebPageAdapter::MenuAction action = adapterActionForContextMenuAction(item.action());
             if (action > QWebPageAdapter::NoAction) {
                 description.type = MenuItem::Action;
                 description.action = action;
@@ -1182,7 +1179,6 @@ void QWebPageAdapter::triggerAction(QWebPageAdapter::MenuAction action, QWebHitT
     case ToggleMediaPlayPause:
         if (HTMLMediaElement* mediaElt = mediaElement(hitTestResult->innerNonSharedNode))
             mediaElt->togglePlayState();
-        break;
     case ToggleMediaMute:
         if (HTMLMediaElement* mediaElt = mediaElement(hitTestResult->innerNonSharedNode))
             mediaElt->setMuted(!mediaElt->muted());
@@ -1207,16 +1203,6 @@ void QWebPageAdapter::triggerAction(QWebPageAdapter::MenuAction action, QWebHitT
         if (commandName)
             editor.command(commandName).execute();
         break;
-    }
-}
-
-void QWebPageAdapter::triggerCustomAction(int action, const QString &title)
-{
-    if (action >= ContextMenuItemBaseCustomTag && action <= ContextMenuItemLastCustomTag) {
-        ContextMenuItem item(ActionType, static_cast<ContextMenuAction>(action), title);
-        page->contextMenuController()->contextMenuItemSelected(&item);
-    } else {
-        ASSERT_NOT_REACHED();
     }
 }
 

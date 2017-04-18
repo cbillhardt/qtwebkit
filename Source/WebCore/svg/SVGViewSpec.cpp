@@ -117,8 +117,8 @@ void SVGViewSpec::setTransformString(const String& transform)
     SVGTransformList newList;
     newList.parse(transform);
 
-    if (RefPtr<SVGAnimatedProperty> wrapper = SVGAnimatedProperty::lookupWrapper<SVGElement, SVGAnimatedTransformList>(m_contextElement, transformPropertyInfo()))
-        static_pointer_cast<SVGAnimatedTransformList>(wrapper)->detachListWrappers(newList.size());
+    if (SVGAnimatedProperty* wrapper = SVGAnimatedProperty::lookupWrapper<SVGElement, SVGAnimatedTransformList>(m_contextElement, transformPropertyInfo()))
+        static_cast<SVGAnimatedTransformList*>(wrapper)->detachListWrappers(newList.size());
 
     m_transform = newList;
 }
@@ -148,12 +148,12 @@ SVGElement* SVGViewSpec::viewTarget() const
     return toSVGElement(element);
 }
 
-RefPtr<SVGTransformListPropertyTearOff> SVGViewSpec::transform()
+SVGTransformListPropertyTearOff* SVGViewSpec::transform()
 {
     if (!m_contextElement)
         return 0;
     // Return the animVal here, as its readonly by default - which is exactly what we want here.
-    return static_cast<SVGTransformListPropertyTearOff*>(static_pointer_cast<SVGAnimatedTransformList>(lookupOrCreateTransformWrapper(this))->animVal().get());
+    return static_cast<SVGTransformListPropertyTearOff*>(static_pointer_cast<SVGAnimatedTransformList>(lookupOrCreateTransformWrapper(this))->animVal());
 }
 
 PassRefPtr<SVGAnimatedRect> SVGViewSpec::viewBoxAnimated()
