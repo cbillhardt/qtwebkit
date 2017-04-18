@@ -88,8 +88,6 @@ public:
     virtual void javaScriptAlert(QWebFrameAdapter*, const QString& msg) OVERRIDE;
     virtual bool javaScriptConfirm(QWebFrameAdapter*, const QString& msg) OVERRIDE;
     virtual bool javaScriptPrompt(QWebFrameAdapter*, const QString& msg, const QString& defaultValue, QString* result) OVERRIDE;
-    virtual void javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack) OVERRIDE;
-
     virtual bool shouldInterruptJavaScript() OVERRIDE;
     virtual void printRequested(QWebFrameAdapter*) OVERRIDE;
     virtual void databaseQuotaExceeded(QWebFrameAdapter*, const QString& databaseName) OVERRIDE;
@@ -122,6 +120,7 @@ public:
     virtual const char* editorCommandForKeyEvent(QKeyEvent*) OVERRIDE;
 
     void updateNavigationActions() OVERRIDE;
+    void clearCustomActions() OVERRIDE;
 
     virtual QObject* inspectorHandle() OVERRIDE;
     virtual void setInspectorFrontend(QObject*) OVERRIDE;
@@ -147,6 +146,7 @@ public:
     void createMainFrame();
 
     void _q_webActionTriggered(bool checked);
+    void _q_customActionTriggered(bool checked);
     void updateAction(QWebPage::WebAction);
     void updateEditorActions();
 
@@ -200,6 +200,7 @@ public:
     bool useFixedLayout;
 
     QAction *actions[QWebPage::WebActionCount];
+    QHash<int, QAction*> customActions;
 
     QPointer <QWindow> window;
     QWidget* inspectorFrontend;

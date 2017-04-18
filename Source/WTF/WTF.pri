@@ -49,4 +49,4 @@ mac {
 }
 
 # MSVC is lacking stdint.h as well as inttypes.h.
-win32-msvc*|win32-icc|wince*: INCLUDEPATH += $$ROOT_WEBKIT_DIR/Source/JavaScriptCore/os-win32
+contains(MSVC_VER, "(9|10|11|12)\.0"): INCLUDEPATH += $$ROOT_WEBKIT_DIR/Source/JavaScriptCore/os-win32
