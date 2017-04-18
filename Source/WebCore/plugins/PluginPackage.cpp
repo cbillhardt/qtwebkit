@@ -334,7 +334,6 @@ void PluginPackage::initializeBrowserFuncs()
 }
 #endif // ENABLE(NETSCAPE_PLUGIN_API)
 
-#if ENABLE(PLUGIN_PACKAGE_SIMPLE_HASH)
 unsigned PluginPackage::hash() const
 {
     struct HashCodes {
@@ -352,7 +351,6 @@ bool PluginPackage::equal(const PluginPackage& a, const PluginPackage& b)
 {
     return a.m_description == b.m_description;
 }
-#endif
 
 int PluginPackage::compareFileVersion(const PlatformModuleVersion& compareVersion) const
 {
