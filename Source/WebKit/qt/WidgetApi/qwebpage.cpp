@@ -501,7 +501,7 @@ QMenu *createContextMenu(QWebPage* page, const QList<MenuItem>& items, QBitArray
         const MenuItem &item = items.at(i);
         switch (item.type) {
         case MenuItem::Action: {
-            QAction* a = nullptr;
+            QAction* a = NULL;
             if (item.action < QWebPageAdapter::ActionCount) {
                 QWebPage::WebAction action = webActionForAdapterMenuAction(static_cast<QWebPageAdapter::MenuAction>(item.action));
                 a = page->action(action);
